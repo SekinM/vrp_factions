@@ -6,3 +6,12 @@ This is a vrp_factions with database support it includes
 - Duty ON/OFF with cobrakai's chat
 
 If You need help DM me on discord : Sekinro#5046
+ **DO NOT FORGET TO ADD THEM IN __resource.lua or fxmanifest.lua**
+ ```
+server_scripts{ 
+  "modules/factions.lua"
+}
+client_scripts{
+  "cfg/factions.lua"
+}
+```
