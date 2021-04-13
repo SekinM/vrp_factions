@@ -247,7 +247,7 @@ function vRP.removeUserFaction(user_id,theGroup)
 		if tmp then
 			for i, v in pairs(factionMembers[theGroup])do
 				if (v.id == user_id) then
-					vRP.tryGetInventoryItem(user_id,"fac_doc|"..theGroup,1,false)
+					-- vRP.tryGetInventoryItem(user_id,"fac_doc|"..theGroup,1,false)
 					tmp.fName = "user"
 					tmp.fRank = 'none'
 					tmp.fLeader = 0
@@ -278,10 +278,14 @@ local function ch_leaveGroup(player,choice)
 	local Rank = vRP.getFactionRank(user_id)
 	if user_id ~= nil then
 		if(vRP.hasUserFaction(user_id))then
-			vRP.removeUserGroup(id,theFaction)
-			vRP.removeUserGroup(id,Rank)
+			Wait(100)
 			vRPclient.notify(player,{"~w~Ai iesit din ~r~"..theFaction.."!"})
 			vRP.removeUserFaction(user_id,theFaction)
+			if vRP.hasGroup(user_id,"Politia Romana") or vRP.hasGroup(user_id,"SMURD") or vRP.hasGroup(user_id,"Crips") or vRP.hasGroup(user_id,"Mafia Rusa") or vRP.hasGroup(user_id,"Bloods") then
+				vRP.removeUserGroup(id,theFaction)
+			else
+			print(nu)
+			end
 		end
 		if(vRP.hasGroup(user_id,"onduty"))then
 			vRP.removeUserGroup(user_id,"onduty")
@@ -480,7 +484,7 @@ local function ch_promoteMember(player,choice)
 						SetTimeout(1000, function()
 							local newRank = vRP.getFactionRank(id)
 							vRPclient.notify(player,{"~w~L-ai promovat pe ~g~"..name.." ~w~de la ~r~"..oldRank.." ~w~la ~g~"..newRank.."!"})
-							vRPclient.notify(target,{"~w~Ai fost promovat de la ~r~"..oldRank.." ~w~la~g~"..newRank.." ~w~in factiunea ~g~"..theFaction.."!"})
+							vRPclient.notify(target,{"~w~Ai fost promovat de la ~r~"..oldRank.." ~w~la~g~ "..newRank.." ~w~in factiunea ~g~"..theFaction.."!"})
 							vRP.removeUserGroup(id,oldRank)
 							vRP.addUserGroup(id,newRank)
 						end)
@@ -629,8 +633,8 @@ local function ch_ranksAndSalary(player,choice)
 	local theFaction = vRP.getUserFaction(user_id)
 	local ranks = vRP.getFactionRanks(theFaction)
 	SetTimeout(400, function()
-		vRP.buildMenu("Ranks & Salaries", {player = player}, function(rsMenu)
-			rsMenu.name = "Ranks & Salaries"
+		vRP.buildMenu("Grade si Salarii", {player = player}, function(rsMenu)
+			rsMenu.name = "Grade si Salarii"
 			rsMenu.css={top="75px",header_color="rgba(200,0,0,0.75)"}
 			rsMenu.onclose = function(player) vRP.openMainMenu(player) end
 			for i, v in pairs(ranks) do
@@ -663,7 +667,7 @@ vRP.registerMenuBuilder("main", function(add, data)
 				elseif(coleader)then
 					isLeader = "Co-Leader"
 				else
-					isLeader = "Member"
+					isLeader = "Membru"
 				end
 				if(vRP.hasGroup(user_id,"onduty"))then
 					Duty = "ON"
@@ -680,7 +684,7 @@ vRP.registerMenuBuilder("main", function(add, data)
 					if(#members == fSlots)then
 						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='red'>"..#members.."</font>/<font color='red'>"..fSlots.."</font><br/>Type: <font color='cyan'>"..fType.."</font><br/>Rank: <font color='grey'>"..rank.."</font><br/>Status: <font color='blue'>"..isLeader.."</font>"
 					else
-						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='yellow'>"..#members.."</font>/<font color='red'>10</font><br/>Type: <font color='cyan'>"..fType.."</font><br/>Rank: <font color='grey'>"..rank.."</font><br/>Status: <font color='blue'>"..isLeader.."</font>"	
+						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='yellow'>"..#members.."</font>/<font color='red'>10</font><br/>Type: <font color='cyan'>ERROR</font><br/>Rank: <font color='grey'>"..rank.."</font><br/>Status: <font color='blue'>"..isLeader.."</font>"	
 					end
 				end
 				choices["Meniu Factiune"] = {function(player,choice)
@@ -707,7 +711,7 @@ vRP.registerMenuBuilder("main", function(add, data)
 							menu["Mode On Duty"] = {ch_On_Duty, "Pune-te On Duty in "..theFaction}
 						end
 						end
-						menu["Member List"] = {ch_membersList, "Membri la "..theFaction}
+						menu["Membri"] = {ch_membersList, "Membri la "..theFaction}
 						menu["Grade si Salarii"] = {ch_ranksAndSalary, "Rankuri si Salarii"}
 						menu["Iesi din factiune"] = {ch_leaveFaction, "Iesi din factiunea "..theFaction}
 						vRP.openMenu(player,menu)
