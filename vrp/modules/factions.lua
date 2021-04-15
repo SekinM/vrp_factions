@@ -281,8 +281,10 @@ local function ch_leaveGroup(player,choice)
 			Wait(100)
 			vRPclient.notify(player,{"~w~Ai iesit din ~r~"..theFaction.."!"})
 			vRP.removeUserFaction(user_id,theFaction)
-			if vRP.hasGroup(user_id,"Politia Romana") or vRP.hasGroup(user_id,"SMURD") or vRP.hasGroup(user_id,"Crips") or vRP.hasGroup(user_id,"Mafia Rusa") or vRP.hasGroup(user_id,"Bloods") then
+			if vRP.hasGroup(user_id,"Politia Romana") or vRP.hasGroup(user_id,"SMURD") or vRP.hasGroup(user_id,"Crips") or vRP.hasGroup(user_id,"Mafia Rusa") or vRP.hasGroup(user_id,"Bloods") or vRP.hasGroup(user_id,"Los Vagos") or vRP.hasGroup(user_id,"Mafia Corleone") or vRP.hasGroup(user_id,"Mafia Siciliana") or vRP.hasGroup(user_id,"Cosa Nostra") or vRP.hasGroup(user_id,"Hitman") then
 				vRP.removeUserGroup(id,theFaction)
+				Wait(150)
+				vRP.removeUserGroup(id,Rank)
 			else
 			print(nu)
 			end
@@ -343,8 +345,11 @@ local function ch_inviteFaction(player,choice)
 						vRPclient.notify(target,{"~w~Ai fost adaugat in ~g~"..theFaction.."!"})
 						vRP.addUserFaction(id,theFaction)
 						local Rank = vRP.getFactionRank(user_id)
+						Wait(150)
 						vRP.addUserGroup(id,"onduty")
+						Wait(150)
 						vRP.addUserGroup(id,theFaction)
+						Wait(150)
 						vRP.addUserGroup(id,Rank)
 					end
 				else
@@ -374,7 +379,9 @@ local function ch_removeFaction(player,choice)
 						vRPclient.notify(player,{"~w~L-ai scos pe ~g~"..name.." ~w~ din ~g~"..theFaction.."!"})
 						vRPclient.notify(target,{"~w~Ai fost dat afara ~g~"..theFaction.."!"})
 						vRP.removeUserFaction(id,theFaction)
+						Wait(150)
 						vRP.removeUserGroup(id,theFaction)
+						Wait(150)
 						vRP.removeUserGroup(id,Rank)
 						if(vRP.hasGroup(id,"onduty"))then
 							vRP.removeUserGroup(id,"onduty")
@@ -676,15 +683,15 @@ vRP.registerMenuBuilder("main", function(add, data)
 				end
 				if(salary > 0)then
 					if(#members == fSlots)then
-						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='red'>"..#members.."</font>/<font color='red'>"..fSlots.."</font><br/>Type: <font color='cyan'>"..fType.."</font><br/>Rank: <font color='grey'>"..rank.."</font><br/>Duty: <font color='green'>"..Duty.."</font><br/>Salary: <font color='green'>$"..salary.."</font><br/>Statut: <font color='yellow'>"..isLeader.."</font>"
+						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='red'>"..#members.."</font>/<font color='red'>"..fSlots.."</font><br/></font><br/>Rank: <font color='grey'>"..rank.."</font><br/>Duty: <font color='green'>"..Duty.."</font><br/>Salary: <font color='green'>$"..salary.."</font><br/>Statut: <font color='yellow'>"..isLeader.."</font>"
 					else
-						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='white'>"..#members.."</font>/<font color='red'>"..fSlots.."</font><br/>Type: <font color='cyan'>"..fType.."</font><br/>Rank: <font color='grey'>"..rank.."</font><br/>Duty: <font color='red'>"..Duty.."</font><br/>Salary: <font color='green'>$"..salary.."</font><br/>Statut: <font color='yellow'>"..isLeader.."</font>"
+						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='white'>"..#members.."</font>/<font color='red'>"..fSlots.."</font><br/></font><br/>Rank: <font color='grey'>"..rank.."</font><br/>Duty: <font color='red'>"..Duty.."</font><br/>Salary: <font color='green'>$"..salary.."</font><br/>Statut: <font color='yellow'>"..isLeader.."</font>"
 					end
 				else
 					if(#members == fSlots)then
-						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='red'>"..#members.."</font>/<font color='red'>"..fSlots.."</font><br/>Type: <font color='cyan'>"..fType.."</font><br/>Rank: <font color='grey'>"..rank.."</font><br/>Status: <font color='blue'>"..isLeader.."</font>"
+						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='red'>"..#members.."</font>/<font color='red'>"..fSlots.."</font><br/><br/>Rank: <font color='grey'>"..rank.."</font><br/>Status: <font color='blue'>"..isLeader.."</font>"
 					else
-						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='yellow'>"..#members.."</font>/<font color='red'>10</font><br/>Type: <font color='cyan'>ERROR</font><br/>Rank: <font color='grey'>"..rank.."</font><br/>Status: <font color='blue'>"..isLeader.."</font>"	
+						infoText = "Name: <font color='red'>"..theFaction.."</font><br/>Members: <font color='yellow'>"..#members.."</font>/<font color='red'>10</font><br/><br/>Rank: <font color='grey'>"..rank.."</font><br/>Status: <font color='blue'>"..isLeader.."</font>"	
 					end
 				end
 				choices["Meniu Factiune"] = {function(player,choice)
