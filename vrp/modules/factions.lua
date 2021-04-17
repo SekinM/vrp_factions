@@ -280,14 +280,15 @@ local function ch_leaveGroup(player,choice)
 		if(vRP.hasUserFaction(user_id))then
 			Wait(100)
 			vRPclient.notify(player,{"~w~Ai iesit din ~r~"..theFaction.."!"})
+			vRP.removeUserGroup(user_id,theFaction)
+			Wait(150)
+			vRP.removeUserGroup(user_id,Rank)
 			vRP.removeUserFaction(user_id,theFaction)
-			if vRP.hasGroup(user_id,"Politia Romana") or vRP.hasGroup(user_id,"SMURD") or vRP.hasGroup(user_id,"Crips") or vRP.hasGroup(user_id,"Mafia Rusa") or vRP.hasGroup(user_id,"Bloods") or vRP.hasGroup(user_id,"Los Vagos") or vRP.hasGroup(user_id,"Mafia Corleone") or vRP.hasGroup(user_id,"Mafia Siciliana") or vRP.hasGroup(user_id,"Cosa Nostra") or vRP.hasGroup(user_id,"Hitman") then
-				vRP.removeUserGroup(id,theFaction)
-				Wait(150)
-				vRP.removeUserGroup(id,Rank)
-			else
-			print(nu)
-			end
+			-- if vRP.hasGroup(user_id,"Politia Romana") or vRP.hasGroup(user_id,"SMURD") or vRP.hasGroup(user_id,"Crips") or vRP.hasGroup(user_id,"Mafia Rusa") or vRP.hasGroup(user_id,"Bloods") or vRP.hasGroup(user_id,"Los Vagos") or vRP.hasGroup(user_id,"Mafia Corleone") or vRP.hasGroup(user_id,"Mafia Siciliana") or vRP.hasGroup(user_id,"Cosa Nostra") or vRP.hasGroup(user_id,"Hitman") then
+
+			-- else
+			-- print(nu)
+			-- end
 		end
 		if(vRP.hasGroup(user_id,"onduty"))then
 			vRP.removeUserGroup(user_id,"onduty")
@@ -343,8 +344,9 @@ local function ch_inviteFaction(player,choice)
 					else
 						vRPclient.notify(player,{"~w~L-ai adaugat pe ~g~"..name.." ~w~in ~g~"..theFaction.."!"})
 						vRPclient.notify(target,{"~w~Ai fost adaugat in ~g~"..theFaction.."!"})
+						Citizen.Wait(500)
 						vRP.addUserFaction(id,theFaction)
-						local Rank = vRP.getFactionRank(user_id)
+						local Rank = vRP.getFactionRank(id)
 						Wait(150)
 						vRP.addUserGroup(id,"onduty")
 						Wait(150)
@@ -368,7 +370,7 @@ end
 local function ch_removeFaction(player,choice)
 	local user_id = vRP.getUserId(player)
 	local theFaction = vRP.getUserFaction(user_id)
-	local Rank = vRP.getFactionRank(user_id)
+	-- local Rank = vRP.getFactionRank(user_id)
 	if user_id ~= nil and vRP.isFactionLeader(user_id,theFaction) or vRP.isFactionCoLeader(user_id,theFaction) then
 		vRP.prompt(player,"User ID: ","",function(player,id)
 			id = parseInt(id)
@@ -376,13 +378,14 @@ local function ch_removeFaction(player,choice)
 				local target = vRP.getUserSource(id)
 				if(target)then
 						local name = GetPlayerName(target)
+						local Rank = vRP.getFactionRank(id)
 						vRPclient.notify(player,{"~w~L-ai scos pe ~g~"..name.." ~w~ din ~g~"..theFaction.."!"})
 						vRPclient.notify(target,{"~w~Ai fost dat afara ~g~"..theFaction.."!"})
-						vRP.removeUserFaction(id,theFaction)
-						Wait(150)
 						vRP.removeUserGroup(id,theFaction)
 						Wait(150)
 						vRP.removeUserGroup(id,Rank)
+						vRP.removeUserFaction(id,theFaction)
+						Wait(150)
 						if(vRP.hasGroup(id,"onduty"))then
 							vRP.removeUserGroup(id,"onduty")
 						end
@@ -763,7 +766,9 @@ local function ch_addfaction(player,choice)
 						vRP.addUserFaction(id,group)
 						local Rank = vRP.getFactionRank(user_id)
 						vRP.addUserGroup(id,"onduty")
+						Citizen.Wait(500)
 						vRP.addUserGroup(id,theFaction)
+						Citizen.Wait(500)
 						vRP.addUserGroup(id,Rank)
 						Citizen.Wait(500)
 						vRP.setFactionLeader(id,group)
@@ -774,7 +779,9 @@ local function ch_addfaction(player,choice)
 						vRP.addUserGroup(id,"onduty")
 						local Rank = vRP.getFactionRank(user_id)
 						vRP.addUserGroup(id,"onduty")
+						Citizen.Wait(500)
 						vRP.addUserGroup(id,theFaction)
+						Citizen.Wait(500)
 						vRP.addUserGroup(id,Rank)
 						Citizen.Wait(500)
 						vRP.setFactionCoLeader(id,group)
@@ -783,10 +790,13 @@ local function ch_addfaction(player,choice)
 					else
 						vRP.addUserFaction(id,group)
 						vRP.addUserGroup(id,"onduty")
+						Citizen.Wait(500)
 						vRP.addUserGroup(id,group)
 						local Rank = vRP.getFactionRank(user_id)
 						vRP.addUserGroup(id,"onduty")
+						Citizen.Wait(500)
 						vRP.addUserGroup(id,theFaction)
+						Citizen.Wait(500)
 						vRP.addUserGroup(id,Rank)
 						vRPclient.notify(player,{"Jucatorul "..name.." a fost adaugat in factiunea "..group})
 					end
@@ -807,6 +817,7 @@ end
 
 local function ch_removefaction(player,choice)
 	local user_id = vRP.getUserId(player)
+	local Rank = vRP.getFactionRank(user_id)
 	if user_id ~= nil then
 		vRP.prompt(player,"User id: ","",function(player,id)
 			id = parseInt(id)
@@ -817,6 +828,8 @@ local function ch_removefaction(player,choice)
 			if(theFaction == "user")then
 				vRPclient.notify(player,{"Jucatorul cu ID-ul "..id.." nu este intr-o factiune"})
 			else
+				vRP.removeUserGroup(id,theFaction)
+				vRP.removeUserGroup(id,Rank)
 				vRP.removeUserFaction(id,theFaction)
 				vRP.removeUserGroup(id,"onduty")
 				vRPclient.notify(player,{theFaction.." removed from user "..id})
