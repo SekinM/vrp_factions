@@ -18,4 +18,4 @@ client_scripts{
   "cfg/factions.lua"
 }
 ```
-do not reupload
+do not reupload or modify
